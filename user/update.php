@@ -17,23 +17,32 @@ $user = new User($db);
 
 $data = json_decode(file_get_contents("php://input")); // Need for "crude" POST data
 
-// Get id of element (user) from user
-$user->id = $data->id;
-
-$user->name     = isset($data->name) ? $data->name : null;
-$user->surname  = isset($data->surname) ? $data->surname : null;
-$user->middle   = isset($data->middle) ? $data->middle : null;
-
-if ($user->update())
+if(isset($data->id))
 {
-    http_response_code(200);
+    // Get id of element (user) from user
+    $user->id = $data->id;
 
-    Util::sendMessage("Профиль был обновлён.");
+    $user->name     = isset($data->name) ? $data->name : null;
+    $user->surname  = isset($data->surname) ? $data->surname : null;
+    $user->middle   = isset($data->middle) ? $data->middle : null;
+
+    if ($user->update())
+    {
+        http_response_code(200);
+
+        Util::sendMessage("Профиль был обновлён.");
+    }
+    else
+    {
+        http_response_code(503);
+
+        Util::sendMessage("Невозможно обновить профиль пользователя.");
+    }
 }
 else
 {
-    http_response_code(503);
+    http_response_code(400);
 
-    Util::sendMessage("Невозможно обновить профиль пользователя.");
+    Util::sendMessage("Невозможно обновить профиль пользователя. Заполните поле id!");
 }
 ?>

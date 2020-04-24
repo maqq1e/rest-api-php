@@ -21,7 +21,7 @@ $data = json_decode(file_get_contents("php://input")); // Need for "crude" POST 
 if (!empty($data->user_id) && !empty($data->number))
 {
     // Phone validation
-    if(preg_match('/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/', $data->number))
+    if(preg_match('/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/', $data->number))
     {
         $user_tel->number   = $data->number;
     }

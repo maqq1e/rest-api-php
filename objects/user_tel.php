@@ -29,6 +29,12 @@ class UserTel
 
     public function create()
     {
+
+        if($this->is_main == 1)
+        {
+            $this->querySetDefault($field = 'is_main', $var = 0);
+        }
+        
         $query = "
                 INSERT INTO {$this->_table_name}
                 SET
@@ -43,7 +49,7 @@ class UserTel
         // Delete all "bad" chars
         $this->user_id  = htmlspecialchars(strip_tags($this->user_id));
         $this->number   = htmlspecialchars(strip_tags($this->number));
-        $this->type     = htmlspecialchars(strip_tags($this->type)); //
+        $this->type     = htmlspecialchars(strip_tags($this->type));
         $this->is_main  = htmlspecialchars(strip_tags($this->is_main));
         $this->created  = htmlspecialchars(strip_tags($this->created));
 
@@ -96,7 +102,7 @@ class UserTel
         $update_variables = implode(', ', $update_variables);
 
         // If exist - set all is_main status for user_id is false (0)
-        if(isset($this->is_main))
+        if($this->is_main)
         {
             if(!$this->querySetDefault($field = 'is_main', $var = 0))
             {

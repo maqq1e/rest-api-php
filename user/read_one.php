@@ -32,10 +32,11 @@ $user->readOne();
 if ($user->name != null)
 {
     $user_array = array(
-        "name"      => $user->name,
-        "surname"   => $user->surname,
-        "middle"    => $user->middle,
-        "tel_list"  => $user->tel_list
+        "name"          => $user->name,
+        "surname"       => $user->surname,
+        "middle"        => $user->middle,
+        "tel_list"      => $user->tel_list,
+        "email_list"    => $user->email_list,
     );
 
     http_response_code(200);

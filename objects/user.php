@@ -12,6 +12,7 @@ class User
     public $surname;
     public $middle;
     public $tel_list;
+    public $email_list;
 
     private $_count;
 
@@ -74,13 +75,15 @@ class User
 
     public function readOne()
     {
-        $user = $this->_getUserQuery($this->id);
-        $nums = $this->getTelQuery($this->id);
+        $user   = $this->_getUserQuery($this->id);
+        $nums   = $this->getTelQuery($this->id);
+        $emails = $this->getEmailList($this->id);
 
-        $this->name     = $user['name'];
-        $this->surname  = $user['surname'];
-        $this->middle   = $user['middle'];
-        $this->tel_list = $nums;
+        $this->name         = $user['name'];
+        $this->surname      = $user['surname'];
+        $this->middle       = $user['middle'];
+        $this->tel_list     = $nums;
+        $this->email_list   = $emails;
     }
 
     public function update()
@@ -93,9 +96,22 @@ class User
         $this->id           = htmlspecialchars(strip_tags($this->id));
 
         // If need update not all fields
-        $update_variables  = !empty($this->name) ? "name = '{$this->name}'" : '';
-        $update_variables .= !empty($this->surname) ? ", surname = '{$this->surname}'" : '';
-        $update_variables .= !empty($this->middle) ? ", middle = '{$this->middle}' " : '';
+        $update_variables = array();
+                
+        if(!empty($this->name))
+        {
+            $update_variables[] = "name = '{$this->name}'";
+        }
+        elseif(!empty($this->surname))
+        {
+            $update_variables[] = "surname = '{$this->surname}'";
+        }
+        else
+        {
+            $update_variables[] ="middle = '{$this->middle}'";
+        }
+
+        $update_variables = implode(', ', $update_variables);
 
         $query = "UPDATE {$this->_table_name}
                 SET
