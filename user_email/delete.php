@@ -17,19 +17,26 @@ $user_email = new UserEmail($db);
 
 $data = json_decode(file_get_contents("php://input")); // Need for "crude" POST data
 
-// Get id of element (user_email) from user
-$user_email->id = $data->id;
-
-if ($user_email->delete())
+if(isset($data->id))
 {
-    http_response_code(200);
+    // Get id of element (user_email) from user
+    $user_email->id = $data->id;
 
-    Util::sendMessage("Номер телефона был удалён.");
+    if ($user_email->delete())
+    {
+        http_response_code(200);
+
+        Util::sendMessage("Номер телефона был удалён.");
+    }
+    else
+    {
+        http_response_code(503);
+
+        Util::sendMessage("Не удалось удалить номер телефона.");
+    }
 }
 else
 {
-    http_response_code(503);
-
-    Util::sendMessage("Не удалось удалить номер телефона.");
+    Util::sendMessage("Вы должны заполнить поле id.");
 }
 ?>

@@ -17,19 +17,26 @@ $user = new User($db);
 
 $data = json_decode(file_get_contents("php://input")); // Need for "crude" POST data
 
-// Get id of element (user) from user
-$user->id = $data->id;
-
-if ($user->delete())
+if(isset($data->id))
 {
-    http_response_code(200);
+    // Get id of element (user) from user
+    $user->id = $data->id;
 
-    Util::sendMessage("Профиль был удалён.");
+    if ($user->delete())
+    {
+        http_response_code(200);
+
+        Util::sendMessage("Профиль был удалён.");
+    }
+    else
+    {
+        http_response_code(503);
+
+        Util::sendMessage("Не удалось удалить профиль.");
+    }
 }
 else
 {
-    http_response_code(503);
-
-    Util::sendMessage("Не удалось удалить профиль.");
+    Util::sendMessage("Вы должны заполнить поле id.");
 }
 ?>

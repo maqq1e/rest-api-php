@@ -19,8 +19,9 @@ if(isset($_GET['id']))
 }
 else
 {
+    http_response_code(400);
+    
     Util::sendMessage("Вы должны ввести id пользователя.");
-    die();
 }
 
 
